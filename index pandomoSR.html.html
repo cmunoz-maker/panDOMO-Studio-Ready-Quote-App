@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ARDEX panDOMO® StudioReady - Calculadora & Pedidos</title>
+    <style>
+        :root {
+            --ardex-black: #1A1A1A;
+            --ardex-gray-dark: #333333;
+            --pandomo-gray-mid: #8E8E93;
+            --pandomo-gray-light: #E5E5EA;
+            --pandomo-bg: #F9F9FB;
+            --ardex-accent: #0056B3;
+            --white: #FFFFFF;
+            --font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: var(--font-family);
+        }
+
+        body {
+            background-color: var(--pandomo-bg);
+            color: var(--ardex-black);
+            padding-bottom: 40px;
+        }
+
+        header {
+            background-color: var(--ardex-black);
+            color: var(--white);
+            padding: 20px 16px;
+            text-align: center;
+            border-bottom: 4px solid var(--pandomo-gray-mid);
+        }
+
+        header h1 {
+            font-size: 1.4rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        header p {
+            font-size: 0.85rem;
+            color: var(--pandomo-gray-mid);
+            margin-top: 4px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 16px;
+        }
+
+        .card {
+            background: var(--white);
+            border-radius: 8px;
+            padding: 18px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            border: 1px solid var(--pandomo-gray-light);
+        }
+
+        .card-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 14px;
+            color: var(--ardex-black);
+            border-bottom: 2px solid var(--pandomo-bg);
+            padding-bottom: 8px;
+        }
+
+        .form-group {
+            margin-bottom: 14px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: var(--ardex-gray-dark);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid var(--pandomo-gray-mid);
+            border-radius: 4px;
+            font-size: 0.95rem;
+            background-color: #FAFAFA;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--ardex-black);
+            background-color: var(--white);
+        }
+
+        .row {
+            display: flex;
+            gap: 12px;
+        }
+
+        .row .form-group {
+            flex: 1;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 14px;
+            background-color: var(--ardex-black);
+            color: var(--white);
+            border: none;
+            border-radius: 4px;
+            font-size: 1rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .btn:hover {
+            background-color: var(--ardex-gray-dark);
+        }
+
+        .btn-secondary {
+            background-color: var(--pandomo-gray-mid);
+            margin-top: 10px;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 8px;
+        }
+
+        .checkbox-group input {
+            width: 18px;
+            height: 18px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 12px;
+            font-size: 0.85rem;
+        }
+
+        th, td {
+            padding: 10px 8px;
+            text-align: left;
+            border-bottom: 1px solid var(--pandomo-gray-light);
+        }
+
+        th {
+            background-color: var(--pandomo-bg);
+            font-weight: bold;
+        }
+
+        .total-box {
+            background-color: var(--ardex-black);
+            color: var(--white);
+            padding: 14px;
+            border-radius: 4px;
+            margin-top: 16px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        @media print {
+            .btn, .form-control, select {
+                border: none !important;
+                background: transparent !important;
+            }
+            .card {
+                box-shadow: none;
+                border: none;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>ARDEX panDOMO® StudioReady</h1>
+        <p>Calculadora Técnica y Pedidos de Sistema</p>
+    </header>
+
+    <div class="container">
+        
+        <!-- 1. Perfil del Cliente / Distribuidor -->
+        <section class="card">
+            <h2 class="card-title">1. Datos del Cliente / Obra</h2>
+            <div class="form-group">
+                <label for="empresa">Nombre Comercial / Empresa</label>
+                <input type="text" id="empresa" class="form-control" placeholder="Ej. Pavimentos Revestimientos S.L.">
+            </div>
+            <div class="form-group">
+                <label for="obra">Ubicación / Dirección de Obra</label>
+                <input type="text" id="obra" class="form-control" placeholder="Ej. Calle Principal 123, Madrid">
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    <label for="contacto">Contacto</label>
+                    <input type="text" id="contacto" class="form-control" placeholder="Nombre">
+                </div>
+                <div class="form-group">
+                    <label for="telefono">Teléfono</label>
+                    <input type="tel" id="telefono" class="form-control" placeholder="+34 600000000">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="email">E-mail de Contacto</label>
+                <input type="email" id="email" class="form-control" placeholder="cliente@ejemplo.com">
+            </div>
+        </section>
+
+        <!-- 2. Parámetros del Proyecto -->
+        <section class="card">
+            <h2 class="card-title">2. Parámetros del Proyecto</h2>
+            <div class="row">
+                <div class="form-group">
+                    <label for="area">Superficie ($m^2$)</label>
+                    <input type="number" id="area" class="form-control" value="50" min="1" onchange="calcular()">
+                </div>
+                <div class="form-group">
+                    <label for="merma">Desperdicio (%)</label>
+                    <input type="number" id="merma" class="form-control" value="5" min="0" onchange="calcular()">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="soporte">Tipo de Soporte</label>
+                <select id="soporte" class="form-control" onchange="calcular()">
+                    <option value="suelo_idoneo">Suelos - Soporte idóneo</option>
+                    <option value="suelo_sin_planimetria">Suelos - Soporte idóneo sin planimetría</option>
+                    <option value="suelo_irregular">Suelos - Hormigón existente irregular</option>
+                    <option value="suelo_discontinuo">Suelos - Revestimiento discontinuo</option>
+                    <option value="pared_absorbente">Paredes - Soporte Absorbente</option>
+                    <option value="pared_no_absorbente">Paredes - Soporte NO Absorbente</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="sellado">Sistema de Sellado Final</label>
+                <select id="sellado" class="form-control" onchange="calcular()">
+                    <option value="mate">Mate (ADI COAT PRIMER + ARDEX R65P)</option>
+                    <option value="semi_satinado">Semi-satinado (ADI COAT PRIMER + LOBA 2K Resist)</option>
+                    <option value="semi_mate">Semi-mate (ADI COAT PRIMER + panDOMO® PU Top Coat)</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Protección / Sellado Adicional</label>
+                <div class="checkbox-group">
+                    <input type="checkbox" id="antislip" onchange="calcular()">
+                    <label for="antislip">Acabado Anti-deslizante (panDOMO® Aditivo Anti-Slip R11)</label>
+                </div>
+                <div class="checkbox-group">
+                    <input type="checkbox" id="protection" onchange="calcular()">
+                    <label for="protection">Protección adicional (panDOMO® Protection Liquid)</label>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. Resultados y Desglose de Materiales -->
+        <section class="card">
+            <h2 class="card-title">3. Desglose de Materiales y Envasado</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Producto</th>
+                        <th>Neta</th>
+                        <th>Total (+merma)</th>
+                        <th>Envases Sugeridos</th>
+                    </tr>
+                </thead>
+                <tbody id="resultados-body">
+                    <!-- Inyección dinámica JS -->
+                </tbody>
+            </table>
+
+            <button class="btn" style="margin-top:20px;" onclick="guardarYEnviar()">Guardar y Generar Pedido</button>
+        </section>
+    </div>
+
+    <script>
+        // Catálogo de Productos y Formatos de Envasado
+        const ENVASES = {
+            "ARDEX P51": [20, 10, 5],
+            "panDOMO® K1": [25],
+            "panDOMO® EPOXY": [10],
+            "panDOMO® EPOXY PATCH": [5],
+            "panDOMO® HARD GRAIN GREY": [25],
+            "ADIMESH 21": [50], // M2 por rollo
+            "panDOMO® StudioReady BASE": [18],
+            "panDOMO® StudioReady FINO": [15, 5],
+            "ADI COAT PRIMER": [5, 1],
+            "ARDEX R65P": [5],
+            "LOBA 2K Resist": [5],
+            "panDOMO® PU Top Coat": [4],
+            "panDOMO® Anti-Slip R11": [1],
+            "panDOMO® Protection Liquid": [1]
+        };
+
+        // Algoritmo de Optimización de Envases (Greedy)
+        function optimizarEnvases(producto, cantidadTotal) {
+            const formatos = ENVASES[producto] || [1];
+            let restante = cantidadTotal;
+            let desglose = [];
+
+            // Para mallas u objetos directos
+            if (producto === "ADIMESH 21") {
+                const rollos = Math.ceil(cantidadTotal / 50);
+                return `${rollos} Rollo(s) de 50 m²`;
+            }
+
+            for (let i = 0; i < formatos.length; i++) {
+                const tam = formatos[i];
+                if (i === formatos.length - 1) {
+                    // El envase más pequeño redondea el excedente
+                    const unidades = Math.ceil(restante / tam);
+                    if (unidades > 0) desglose.push(`${unidades} x ${tam} kg/L`);
+                } else {
+                    const unidades = Math.floor(restante / tam);
+                    if (unidades > 0) {
+                        desglose.push(`${unidades} x ${tam} kg/L`);
+                        restante -= unidades * tam;
+                    }
+                }
+            }
+            return desglose.join(" + ") || "0 envases";
+        }
+
+        // Cargar datos locales de cliente al iniciar
+        window.addEventListener('DOMContentLoaded', () => {
+            const clienteGuardado = JSON.parse(localStorage.getItem('pandomo_cliente') || '{}');
+            if (clienteGuardado) {
+                document.getElementById('empresa').value = clienteGuardado.empresa || '';
+                document.getElementById('obra').value = clienteGuardado.obra || '';
+                document.getElementById('contacto').value = clienteGuardado.contacto || '';
+                document.getElementById('telefono').value = clienteGuardado.telefono || '';
+                document.getElementById('email').value = clienteGuardado.email || '';
+            }
+            calcular();
+        });
+
+        // Motor de Cálculo Principal
+        function calcular() {
+            const area = parseFloat(document.getElementById('area').value) || 0;
+            const mermaPct = (parseFloat(document.getElementById('merma').value) || 0) / 100;
+            const soporte = document.getElementById('soporte').value;
+            const sellado = document.getElementById('sellado').value;
+            const antiSlip = document.getElementById('antislip').checked;
+            const protection = document.getElementById('protection').checked;
+
+            if (area <= 0) return;
+
+            let listaProductos = [];
+
+            // 1. Ciclo de Capa de Imprimación y Preparación (Soporte)
+            switch (soporte) {
+                case 'suelo_idoneo':
+                    listaProductos.push({ nombre: "ARDEX P51", consumo: 0.10, unidad: "kg" });
+                    break;
+                case 'suelo_sin_planimetria':
+                    listaProductos.push({ nombre: "ARDEX P51", consumo: 0.10, unidad: "kg" });
+                    listaProductos.push({ nombre: "panDOMO® K1", consumo: 8.25, unidad: "kg" });
+                    break;
+                case 'suelo_irregular':
+                    listaProductos.push({ nombre: "panDOMO® EPOXY", consumo: 0.20, unidad: "kg" });
+                    listaProductos.push({ nombre: "panDOMO® HARD GRAIN GREY", consumo: 3.00, unidad: "kg" });
+                    listaProductos.push({ nombre: "ADIMESH 21", consumo: 1.10, unidad: "m²" });
+                    break;
+                case 'suelo_discontinuo':
+                    listaProductos.push({ nombre: "panDOMO® EPOXY PATCH", consumo: 0.45, unidad: "kg" });
+                    listaProductos.push({ nombre: "ADIMESH 21", consumo: 1.10, unidad: "m²" });
+                    break;
+                case 'pared_absorbente':
+                    listaProductos.push({ nombre: "ARDEX P51", consumo: 0.20, unidad: "kg" });
+                    break;
+                case 'pared_no_absorbente':
+                    listaProductos.push({ nombre: "ADI COAT PRIMER", consumo: 0.10, unidad: "kg" });
+                    break;
+            }
+
+            // 2. Capa Base y Microcemento StudioReady
+            listaProductos.push({ nombre: "panDOMO® StudioReady BASE", consumo: 2.00, unidad: "kg" });
+            listaProductos.push({ nombre: "panDOMO® StudioReady FINO", consumo: 0.95, unidad: "kg" });
+
+            // 3. Imprimación de Sellado
+            listaProductos.push({ nombre: "ADI COAT PRIMER", consumo: 0.10, unidad: "kg" });
+
+            // 4. Acabado / Sellado Seleccionado
+            if (sellado === 'mate') {
+                listaProductos.push({ nombre: "ARDEX R65P", consumo: 0.17, unidad: "kg" });
+            } else if (sellado === 'semi_satinado') {
+                listaProductos.push({ nombre: "LOBA 2K Resist", consumo: 0.077, unidad: "L" });
+            } else if (sellado === 'semi_mate') {
+                listaProductos.push({ nombre: "panDOMO® PU Top Coat", consumo: 0.12, unidad: "kg" });
+            }
+
+            // 5. Opciones Adicionales
+            if (antiSlip) {
+                listaProductos.push({ nombre: "panDOMO® Anti-Slip R11", consumo: 0.02, unidad: "kg" });
+            }
+            if (protection) {
+                listaProductos.push({ nombre: "panDOMO® Protection Liquid", consumo: 0.05, unidad: "L" });
+            }
+
+            // Consolidar duplicados (ej. ADI COAT PRIMER si coincide en varias etapas)
+            const mapProductos = {};
+            listaProductos.forEach(item => {
+                if (!mapProductos[item.nombre]) {
+                    mapProductos[item.nombre] = { ...item };
+                } else {
+                    mapProductos[item.nombre].consumo += item.consumo;
+                }
+            });
+
+            // Renderizar Resultados
+            const tbody = document.getElementById('resultados-body');
+            tbody.innerHTML = '';
+
+            Object.values(mapProductos).forEach(prod => {
+                const cantidadNeta = area * prod.consumo;
+                const cantidadTotal = cantidadNeta * (1 + mermaPct);
+                const envases = optimizarEnvases(prod.nombre, cantidadTotal);
+
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td><strong>${prod.nombre}</strong></td>
+                    <td>${cantidadNeta.toFixed(2)} ${prod.unidad}</td>
+                    <td><strong>${cantidadTotal.toFixed(2)} ${prod.unidad}</strong></td>
+                    <td>${envases}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // Guardar Datos del Cliente y Preparar Pedido
+        function guardarYEnviar() {
+            const clienteData = {
+                empresa: document.getElementById('empresa').value,
+                obra: document.getElementById('obra').value,
+                contacto: document.getElementById('contacto').value,
+                telefono: document.getElementById('telefono').value,
+                email: document.getElementById('email').value
+            };
+
+            // Almacenamiento local persistente
+            localStorage.setItem('pandomo_cliente', JSON.stringify(clienteData));
+
+            alert('Datos de cliente guardados correctamente. Generando borrador de pedido...');
+            window.print();
+        }
+    </script>
+</body>
+</html>
